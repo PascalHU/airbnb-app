@@ -31,6 +31,6 @@ No request is send to BackEnd if you try to update your profile with out changin
 | `email`       | string | Yes      | User Email Adress (needed for SignIn) | `email = JohnDoe@gmail.com`                         |
 | `username`    | string | Yes      | Username of member.                   | `username="John Doe"`                               |
 | `description` | string | Yes      | Description of member.                | `description="Full-time Traveller. Globe Trotter."` |
-| `image`       | string | Yes      | Must match password to signup         | `image="https://...`                                |
+| `image`       | string | No       | Must match password to signup         | `image="https://...`                                |
 
 #### Developped with ReactNative/Expo

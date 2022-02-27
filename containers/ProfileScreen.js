@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -77,40 +76,45 @@ export default function ProfileScreen({ userToken, userId, setToken, setId }) {
     try {
       setMsg("");
       setIsLoading(true);
-      if (
-        data.username !== username ||
-        data.email !== email ||
-        data.description !== description
-      ) {
-        const response = await axios.put(
-          "https://express-airbnb-api.herokuapp.com/user/update",
-          { email: email, description: description, username: username },
-          { headers: { authorization: `Bearer ${userToken}` } }
-        );
-        if (response.data) {
-          setMsg("Info Updated");
-          setData(response.data);
+      if (username && email && description) {
+        if (
+          data.username !== username ||
+          data.email !== email ||
+          data.description !== description
+        ) {
+          const response = await axios.put(
+            "https://express-airbnb-api.herokuapp.com/user/update",
+            { email: email, description: description, username: username },
+            { headers: { authorization: `Bearer ${userToken}` } }
+          );
+          if (response.data) {
+            setMsg("Info Updated");
+            setData(response.data);
+          }
         }
-      }
-      if (selectedPicture) {
-        const tab = selectedPicture.split(".");
-        const formData = new FormData();
-        formData.append("photo", {
-          uri: selectedPicture,
-          name: `${data.username}.${tab[1]}`,
-          type: `image/${tab[1]}`,
-        });
-        const response = await axios.put(
-          "https://express-airbnb-api.herokuapp.com/user/upload_picture",
-          formData,
-          { headers: { authorization: `Bearer ${userToken}` } }
-        );
-        if (response.data) {
-          setMsg("Info Updated");
-          setPhoto(response.data.photo.url);
-          setSelectedPicture(null);
+        if (selectedPicture) {
+          const tab = selectedPicture.split(".");
+          const formData = new FormData();
+          formData.append("photo", {
+            uri: selectedPicture,
+            name: `${data.username}.${tab[1]}`,
+            type: `image/${tab[1]}`,
+          });
+          const response = await axios.put(
+            "https://express-airbnb-api.herokuapp.com/user/upload_picture",
+            formData,
+            { headers: { authorization: `Bearer ${userToken}` } }
+          );
+          if (response.data) {
+            setMsg("Info Updated");
+            setPhoto(response.data.photo.url);
+            setSelectedPicture(null);
+          }
         }
+      } else {
+        setMsg("All Fields are required");
       }
+
       setIsLoading(false);
     } catch (error) {
       setMsg(error.response.data.error);
